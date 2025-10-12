@@ -22,7 +22,9 @@ const VirtualTryOn = () => {
 
 
   const handleVirtualTryOn = async (productId: number) => {
-    const VIRTUAL_TRYON_API_URL = "http://localhost:5000/api/virtual-tryon";
+    const VIRTUAL_TRYON_API_URL = `${import.meta.env.VITE_API_URL || "http://localhost:5000"
+      }/api/virtual-tryon`;
+
 
     if (!VIRTUAL_TRYON_API_URL) {
       toast({

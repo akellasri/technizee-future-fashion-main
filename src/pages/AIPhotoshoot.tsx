@@ -80,7 +80,9 @@ const AIPhotoshoot = () => {
   };
 
   const handleGeneratePhotoshoot = async () => {
-    const PHOTOSHOOT_API_URL = "http://localhost:5000/api/ai-photoshoot";
+    const PHOTOSHOOT_API_URL = `${import.meta.env.VITE_API_URL || "http://localhost:5000"
+      }/api/ai-photoshoot`;
+
 
     if (!PHOTOSHOOT_API_URL) {
       toast({
