@@ -19,6 +19,7 @@ const VirtualTryOn = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [countdown, setCountdown] = useState<number | null>(null);
+  const [dynamicVideoHeight, setDynamicVideoHeight] = useState<number | null>(null);
 
 
   const handleVirtualTryOn = async (productId: number) => {
@@ -127,12 +128,34 @@ const VirtualTryOn = () => {
   const startWebcam = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
-        video: { width: 1280, height: 720 }
+        video: {
+          width: { ideal: 720 },
+          height: { ideal: 1080 },
+          aspectRatio: { ideal: 9 / 16 },
+          facingMode: "user"
+        }
       });
+
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
         await videoRef.current.play(); // 👈 ensure video actually starts
         setIsWebcamActive(true);
+
+        // small wait to ensure metadata is present, then compute dynamic height (if you do that)
+        await new Promise(r => setTimeout(r, 50));
+
+        // --- new: compute dynamic height to remove letterbox without cropping ---
+        try {
+          await new Promise((r) => setTimeout(r, 50)); // allow metadata to populate
+          const vidW = videoRef.current.videoWidth || 1;
+          const vidH = videoRef.current.videoHeight || 1;
+          const containerWidth = videoRef.current.getBoundingClientRect().width || videoRef.current.clientWidth;
+          const newHeight = Math.round(containerWidth * (vidH / vidW));
+          const minH = 240;
+          const maxH = 1080;
+          setDynamicVideoHeight(Math.max(minH, Math.min(maxH, newHeight)));
+        } catch (e) { /* ignore */ }
+        // --- end new ---
 
         // Start countdown
         let seconds = 5;
@@ -173,31 +196,87 @@ const VirtualTryOn = () => {
       const context = canvas.getContext('2d');
 
       // Ensure video is loaded and has dimensions
-      if (context && video.videoWidth > 0 && video.videoHeight > 0) {
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-        context.drawImage(video, 0, 0);
-
-        canvas.toBlob((blob) => {
-          if (blob) {
-            const file = new File([blob], 'webcam-capture.jpg', { type: 'image/jpeg' });
-            setUserImageFile(file);
-            stopWebcam();
-            toast({
-              title: "Photo captured!",
-              description: "Ready for virtual try-on",
-            });
-          }
-        }, 'image/jpeg', 0.8);
-      } else {
+      if (!context || video.videoWidth === 0 || video.videoHeight === 0) {
         toast({
           title: "Capture failed",
           description: "Please wait for camera to fully load",
           variant: "destructive",
         });
+        return;
       }
+
+      // Use displayed bounding box so result matches preview
+      const rect = video.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+
+      canvas.width = Math.round(rect.width * dpr);
+      canvas.height = Math.round(rect.height * dpr);
+      canvas.style.width = `${Math.round(rect.width)}px`;
+      canvas.style.height = `${Math.round(rect.height)}px`;
+
+      // If you mirror preview with CSS transform (scaleX(-1)), then flip when drawing
+      const isMirrored = video.style.transform?.includes('scaleX(-1)') || false;
+
+      if (isMirrored) {
+        context.save();
+        context.translate(canvas.width, 0);
+        context.scale(-1, 1);
+      }
+
+      // draw displayed video into canvas destination area
+      // draw displayed video into canvas destination area while preserving aspect (object-contain)
+      const vidW = video.videoWidth || 1;
+      const vidH = video.videoHeight || 1;
+      const vidAspect = vidW / vidH;
+      const elemW = rect.width;
+      const elemH = rect.height;
+      const elemAspect = elemW / elemH;
+
+      let displayedVidW: number, displayedVidH: number;
+      if (elemAspect > vidAspect) {
+        // element is wider than video -> video fills height, bars left/right
+        displayedVidH = elemH;
+        displayedVidW = displayedVidH * vidAspect;
+      } else {
+        // element is taller (or narrower) -> video fills width, bars top/bottom
+        displayedVidW = elemW;
+        displayedVidH = displayedVidW / vidAspect;
+      }
+
+      const destVidW = Math.round(displayedVidW * dpr);
+      const destVidH = Math.round(displayedVidH * dpr);
+      const destX = Math.round((canvas.width - destVidW) / 2);
+      const destY = Math.round((canvas.height - destVidH) / 2);
+
+      // Draw mirrored to match preview if isMirrored (preview uses style transform scaleX(-1))
+      if (isMirrored) {
+        context.drawImage(video, destX + destVidW, destY, -destVidW, destVidH);
+      } else {
+        context.drawImage(video, destX, destY, destVidW, destVidH);
+      }
+
+
+
+      canvas.toBlob((blob) => {
+        if (blob) {
+          const file = new File([blob], 'webcam-capture.jpg', { type: 'image/jpeg' });
+          setUserImageFile(file);
+          stopWebcam();
+          toast({
+            title: "Photo captured!",
+            description: "Ready for virtual try-on",
+          });
+        }
+      }, 'image/jpeg', 0.8);
+    } else {
+      toast({
+        title: "Capture failed",
+        description: "Please wait for camera to fully load",
+        variant: "destructive",
+      });
     }
   };
+
 
   return (
     <div className="min-h-screen bg-background">
@@ -275,13 +354,13 @@ const VirtualTryOn = () => {
 
               {/* Webcam Video */}
               {isWebcamActive && (
-                <div className="relative mt-4">
+                <div className="relative mt-4" style={{ height: dynamicVideoHeight ? `${dynamicVideoHeight}px` : undefined }}>
                   <video
                     ref={videoRef}
                     autoPlay
                     muted
                     playsInline
-                    className="w-full rounded-lg"
+                    className="w-full h-auto rounded-lg bg-black object-contain"
                     style={{ transform: 'scaleX(-1)' }}
                   />
                   <canvas ref={canvasRef} className="hidden" />
