@@ -4,13 +4,23 @@
 import menShirt1 from "@/assets/men-shirt-1.jpg";
 import menShirt2 from "@/assets/men-shirt-2.jpg";
 import menShirt3 from "@/assets/men-shirt-3.jpg";
+import menShirt4 from "@/assets/men-shirt-4.jpg";
+import menShirt5 from "@/assets/men-shirt-5.jpg";
 import menPants1 from "@/assets/men-pants-1.jpg";
 import menPants2 from "@/assets/men-pants-2.jpg";
 import womenTop1 from "@/assets/women-top-1.jpg";
 import womenTop2 from "@/assets/women-top-2.jpg";
 import womenTop3 from "@/assets/women-top-3.jpg";
+import womenTop4 from "@/assets/women-top-4.jpg";
 import womenBottom1 from "@/assets/women-bottom-1.jpg";
 import womenBottom2 from "@/assets/women-bottom-2.jpg";
+import womenDress1 from "@/assets/women-dress-1.jpg";
+import womenDress2 from "@/assets/women-dress-2.jpg";
+import womenDress3 from "@/assets/women-dress-3.jpg";
+import womenSaree1 from "@/assets/women-saree-1.jpg";
+import womenSaree2 from "@/assets/women-saree-2.jpg";
+import womenSaree3 from "@/assets/women-saree-3.jpg";
+
 
 export type Product = {
   id: number;
@@ -67,9 +77,35 @@ export const products: Product[] = [
     sizes: ["S", "M", "L", "XL"],
     colors: ["Black", "White", "Gray"],
   },
-  // Men's Lower Garments
   {
     id: 4,
+    name: "Men's Cotton T-Shirt",
+    price: "₹999",
+    originalPrice: "₹1,499",
+    images: [menShirt4],
+    category: "men",
+    type: "upper_body",
+    rating: 4.3,
+    reviews: 94,
+    sizes: ["S", "M", "L", "XL"],
+    colors: ["Black", "White", "Gray"],
+  },
+  {
+    id: 5,
+    name: "Men's Cotton T-Shirt",
+    price: "₹999",
+    originalPrice: "₹1,499",
+    images: [menShirt5],
+    category: "men",
+    type: "upper_body",
+    rating: 4.3,
+    reviews: 94,
+    sizes: ["S", "M", "L", "XL"],
+    colors: ["Black", "White", "Gray"],
+  },
+  // Men's Lower Garments
+  {
+    id: 6,
     name: "Men's Slim Fit Jeans",
     price: "₹2,199",
     originalPrice: "₹2,999",
@@ -82,7 +118,7 @@ export const products: Product[] = [
     colors: ["Blue", "Black", "Gray"],
   },
   {
-    id: 5,
+    id: 7,
     name: "Men's Formal Trousers",
     price: "₹1,799",
     originalPrice: "₹2,399",
@@ -96,7 +132,7 @@ export const products: Product[] = [
   },
   // Women's Upper Garments
   {
-    id: 6,
+    id: 8,
     name: "Women's Elegant Blouse",
     price: "₹1,599",
     originalPrice: "₹2,199",
@@ -109,7 +145,7 @@ export const products: Product[] = [
     colors: ["White", "Pink", "Blue"],
   },
   {
-    id: 7,
+    id: 9,
     name: "Women's Casual Top",
     price: "₹1,199",
     originalPrice: "₹1,699",
@@ -122,7 +158,7 @@ export const products: Product[] = [
     colors: ["Black", "White", "Red"],
   },
   {
-    id: 8,
+    id: 10,
     name: "Women's Summer Dress",
     price: "₹2,299",
     originalPrice: "₹3,199",
@@ -134,9 +170,22 @@ export const products: Product[] = [
     sizes: ["XS", "S", "M", "L", "XL"],
     colors: ["Floral", "Solid", "Striped"],
   },
+  {
+    id: 11,
+    name: "Women's Summer Dress",
+    price: "₹2,299",
+    originalPrice: "₹3,199",
+    images: [womenTop4],
+    category: "women",
+    type: "dresses",
+    rating: 4.8,
+    reviews: 189,
+    sizes: ["XS", "S", "M", "L", "XL"],
+    colors: ["Floral", "Solid", "Striped"],
+  },
   // Women's Lower Garments
   {
-    id: 9,
+    id: 12,
     name: "Women's Skinny Jeans",
     price: "₹1,899",
     originalPrice: "₹2,599",
@@ -149,7 +198,7 @@ export const products: Product[] = [
     colors: ["Blue", "Black", "Light Blue"],
   },
   {
-    id: 10,
+    id: 13,
     name: "Women's A-Line Skirt",
     price: "₹1,399",
     originalPrice: "₹1,899",
@@ -160,5 +209,83 @@ export const products: Product[] = [
     reviews: 98,
     sizes: ["XS", "S", "M", "L", "XL"],
     colors: ["Black", "Navy", "Beige"],
+  },
+  {
+    id: 14,
+    name: "Women's Summer Dress",
+    price: "₹2,299",
+    originalPrice: "₹3,199",
+    images: [womenDress1],
+    category: "women",
+    type: "dresses",
+    rating: 4.8,
+    reviews: 189,
+    sizes: ["XS", "S", "M", "L", "XL"],
+    colors: ["Floral", "Solid", "Striped"],
+  },
+  {
+    id: 15,
+    name: "Women's Summer Dress",
+    price: "₹2,299",
+    originalPrice: "₹3,199",
+    images: [womenDress2],
+    category: "women",
+    type: "dresses",
+    rating: 4.8,
+    reviews: 189,
+    sizes: ["XS", "S", "M", "L", "XL"],
+    colors: ["Floral", "Solid", "Striped"],
+  },
+  {
+    id: 16,
+    name: "Women's Summer Dress",
+    price: "₹2,299",
+    originalPrice: "₹3,199",
+    images: [womenDress3],
+    category: "women",
+    type: "dresses",
+    rating: 4.8,
+    reviews: 189,
+    sizes: ["XS", "S", "M", "L", "XL"],
+    colors: ["Floral", "Solid", "Striped"],
+  },
+  {
+    id: 17,
+    name: "Women's Summer Dress",
+    price: "₹2,299",
+    originalPrice: "₹3,199",
+    images: [womenSaree1],
+    category: "women",
+    type: "upper_body",
+    rating: 4.8,
+    reviews: 189,
+    sizes: ["XS", "S", "M", "L", "XL"],
+    colors: ["Floral", "Solid", "Striped"],
+  },
+  {
+    id: 18,
+    name: "Women's Summer Dress",
+    price: "₹2,299",
+    originalPrice: "₹3,199",
+    images: [womenSaree2],
+    category: "women",
+    type: "upper_body",
+    rating: 4.8,
+    reviews: 189,
+    sizes: ["XS", "S", "M", "L", "XL"],
+    colors: ["Floral", "Solid", "Striped"],
+  },
+  {
+    id: 19,
+    name: "Women's Summer Dress",
+    price: "₹2,299",
+    originalPrice: "₹3,199",
+    images: [womenSaree3],
+    category: "women",
+    type: "upper_body",
+    rating: 4.8,
+    reviews: 189,
+    sizes: ["XS", "S", "M", "L", "XL"],
+    colors: ["Floral", "Solid", "Striped"],
   },
 ];
