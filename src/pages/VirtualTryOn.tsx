@@ -129,7 +129,7 @@ const VirtualTryOn = () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
         video: {
-          width: { ideal: 720 },
+          width: { ideal: 1920 },
           height: { ideal: 1080 },
           aspectRatio: { ideal: 9 / 16 },
           facingMode: "user"
