@@ -1,3 +1,4 @@
+// src/pages/ProductDetail.tsx
 import { useState, useRef, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
