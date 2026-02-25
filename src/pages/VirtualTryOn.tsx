@@ -72,6 +72,7 @@ const VirtualTryOn = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "x-api-key": import.meta.env.VITE_INTERNAL_KEY
         },
         body: JSON.stringify(requestBody),
       });
